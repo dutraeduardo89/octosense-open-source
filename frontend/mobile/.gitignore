@@ -1,0 +1,28 @@
+# === SEGURANÇA (NUNCA SUBIR PARA O GITHUB) ===
+.env
+*.jks
+*.keystore
+key.properties
+google-services.json
+lib/core/config/secrets.dart
+
+# === FLUTTER ===
+frontend/mobile/.dart_tool/
+frontend/mobile/build/
+frontend/mobile/.flutter-plugins
+frontend/mobile/.flutter-plugins-dependencies
+frontend/mobile/pubspec.lock
+
+# === C# / .NET ===
+backend/api/bin/
+backend/api/obj/
+*.user
+*.suo
+
+# === IDE ===
+.idea/
+.vscode/
+*.iml
+
+# === SISTEMA ===
+.DS_Store

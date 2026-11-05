@@ -1,0 +1,42 @@
+# ==============================================================
+# .dockerignore — evita copiar lixo pro build context do Docker
+# ==============================================================
+
+# .NET
+**/bin/
+**/obj/
+**/*.user
+**/*.suo
+**/TestResults/
+
+# Flutter (não usado pelo build do backend, mas evita contexto enorme)
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/build/
+**/.pub/
+
+# Git / IDE
+**/.git/
+**/.gitignore
+**/.github/
+**/.vs/
+**/.vscode/
+**/.idea/
+**/.cursor/
+**/.continue/
+**/.aiassistant/
+**/.ai-harness/
+
+# Docs e configs locais
+docs/
+security/
+**/*.md
+
+# Segredos e env
+.env
+.env.*
+!.env.example
+**/appsettings.Development.json
+**/secrets/

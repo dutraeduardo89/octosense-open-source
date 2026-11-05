@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/OctoSense.Api/OctoSense.Api.csproj" />
+    <Project Path="src/OctoSense.Application/OctoSense.Application.csproj" />
+    <Project Path="src/OctoSense.Domain/OctoSense.Domain.csproj" />
+    <Project Path="src/OctoSense.Infrastructure/OctoSense.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/OctoSense.Api.Tests/OctoSense.Api.Tests.csproj" />
+  </Folder>
+</Solution>

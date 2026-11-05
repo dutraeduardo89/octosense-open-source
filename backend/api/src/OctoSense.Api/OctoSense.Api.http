@@ -1,0 +1,27 @@
+@OctoSense.Api_HostAddress = http://localhost:5137
+
+### Swagger UI
+GET {{OctoSense.Api_HostAddress}}/swagger/index.html
+
+### OpenAPI document
+GET {{OctoSense.Api_HostAddress}}/swagger/octosense/swagger.json
+
+###
+GET {{OctoSense.Api_HostAddress}}/health
+Accept: application/json
+
+###
+
+POST {{OctoSense.Api_HostAddress}}/readings
+Content-Type: application/json
+
+{
+  "userId": "usr_demo_001",
+  "deviceId": "dev_galaxy_watch_6",
+  "deviceSource": "SamsungHealth",
+  "recordedAt": "2026-09-19T17:00:00Z",
+  "heartRateBpm": 72,
+  "steps": 1450,
+  "syncMode": "Background",
+  "batteryLevel": 88
+}

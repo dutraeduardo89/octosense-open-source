@@ -1,0 +1,69 @@
+# === SEGURANÇA (NUNCA SUBIR PARA O GITHUB) ===
+.env
+*.jks
+*.keystore
+key.properties
+google-services.json
+lib/core/config/secrets.dart
+
+# === FLUTTER ===
+frontend/mobile/.dart_tool/
+frontend/mobile/build/
+frontend/mobile/.flutter-plugins
+frontend/mobile/.flutter-plugins-dependencies
+frontend/mobile/pubspec.lock
+
+# === C# / .NET ===
+backend/api/bin/
+backend/api/obj/
+*.user
+*.suo
+
+# === IDE ===
+.idea/
+.vscode/
+*.iml
+
+# === SISTEMA ===
+.DS_Store
+
+# === ARQUIVOS PERIGOSOS EXTRAS ===
+client_secret_*.json
+OctoSense-*.apk
+OctoSense-*.zip
+
+# === CONFIGURAÇÕES LOCAIS DE IA ===
+.ai-harness/
+.aiassistant/
+.continue/
+.cursor/
+.windsurfrules
+AGENTS.md
+CLAUDE.md
+CONVENTIONS.md
+security/
+
+# === ARQUIVOS DE CONFIGURAÇÃO DO .NET (PERIGO DE SENHAS) ===
+appsettings.Development.json
+appsettings.*.json
+!appsettings.json
+
+# === BACKUPS LOCAIS ===
+*.bak
+*.bak2
+*.bak3
+*.bak4
+
+# === PASTAS DE BUILD DO .NET ===
+**/bin/
+**/obj/
+
+# === CONFIGURAÇÕES DE IA ===
+.cursor/
+.continue/
+.ai-harness/
+.aiassistant/
+.windsurfrules
+AGENTS.md
+CLAUDE.md
+CONVENTIONS.md
