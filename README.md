@@ -1,89 +1,146 @@
-OctoSense
-OctoSense é um aplicativo Android (Flutter) focado em agregação de dados de saúde. Ele lê métricas de wearables via Android Health Connect, envia os dados para um backend próprio (C# .NET) e gera insights personalizados usando um modelo de linguagem local (Ollama).
+# OctoSense
 
-O projeto foi originalmente construído como trabalho de conclusão para a feira de tecnologia EXPOTEC (Fortec), sob o tema "Aparelhos Inteligentes e Impactos na Saúde".
+\!Flutter \!C# \!.NET \!MongoDB
 
-Arquitetura do Sistema
-O fluxo de dados funciona da seguinte forma:
+O OctoSense é um aplicativo Android que coleta e centraliza dados de saúde de dispositivos vestíveis, utilizando o Android Health Connect. Os dados são enviados para um backend próprio e utilizados para gerar resumos com um modelo de linguagem local.
 
-Coleta (Mobile): O relógio (ex: Redmi Watch 5 Active) sincroniza com o Health Connect do Android.
+O projeto foi desenvolvido como trabalho de conclusão para a feira de tecnologia EXPOTEC (Fortec), com o tema "Aparelhos Inteligentes e Impactos na Saúde".
 
-Leitura (Flutter): O app lê esses dados usando o pacote health e lida com a deduplicação de fontes (evitando contagem dupla do sono, por exemplo).
+## Arquitetura
 
-Envio (HTTP): O app envia um resumo diário para a API, autenticando via JWT.
+O funcionamento do sistema segue estas etapas:
 
-Processamento (Backend): A API (C#) salva os dados no MongoDB e, quando solicitada, envia as métricas para o Ollama gerar um resumo em texto natural.
+1. **Coleta:** o relógio sincroniza as métricas com o Health Connect.
+2. **Leitura:** o aplicativo Flutter acessa os dados por meio do pacote `health` e realiza a deduplicação dos registros.
+3. **Envio:** os dados são enviados para a API por meio de requisições HTTP autenticadas com JWT.
+4. **Processamento:** o backend armazena as informações no MongoDB e envia as métricas ao Ollama.
+5. **Exibição:** o aplicativo apresenta os dados em gráficos e exibe o resumo gerado pelo modelo.
 
-Exibição: O app renderiza os gráficos e o insight gerado.
+## Tecnologias
 
-Ficha Técnica
-Frontend: Flutter / Dart
+| Componente | Tecnologia | Utilização |
+| --- | --- | --- |
+| Frontend | Flutter / Dart | Aplicativo Android |
+| Gráficos | fl\_chart | Visualização das métricas |
+| Injeção de dependência | get\_it | Gerenciamento de dependências |
+| Backend | C# / .NET | API com ASP.NET Core e Minimal APIs |
+| Arquitetura | Clean Architecture | Organização do backend |
+| Banco de dados | MongoDB | Armazenamento de usuários e métricas |
+| IA | Ollama | Execução local de modelos de linguagem |
+| Autenticação | Google Sign-In + JWT | Autenticação e controle de acesso |
+| Dados de saúde | Android Health Connect | Acesso às métricas dos dispositivos |
 
-Backend: C# / .NET / ASP.NET Core
+## Pré-requisitos
 
-Banco de Dados: MongoDB
+- Flutter SDK.
+- Docker e Docker Compose.
+- Ollama instalado.
+- Um modelo compatível com o Ollama, como `llama3` ou `phi3`.
+- Projeto configurado no Google Cloud Console para autenticação OAuth.
 
-IA: Ollama (Rodando localmente, modelo padrão configurável)
+## Instalação
 
-Autenticação: Google Sign-In + JWT (Bearer Tokens)
+### 1\. Backend
 
-Integração de Saúde: Android Health Connect API
+Clone o repositório:
 
-Pré-requisitos para Rodar Localmente
-Para testar o projeto completo na sua máquina, você precisará de:
-
-Flutter SDK instalado.
-
-Docker e Docker Compose para o banco e a API.
-
-Ollama rodando localmente (recomendado modelo llama3 ou phi3).
-
-Um projeto no Google Cloud Console para gerar suas próprias credenciais OAuth.
-
-Como Rodar o Projeto
-Passo 1: Configurar o Backend
 bash
-# Clone o repositório
+
+```bash
 git clone https://github.com/dutraeduardo89/octosense-open-source.git
+
 cd octosense-open-source
+```
 
-# Configure as variáveis de ambiente
-cp .env.example .env
-# Edite o .env com as credenciais do MongoDB
+Configure as variáveis de ambiente:
 
-# Suba os containers (API + MongoDB)
-docker-compose up -d
-Passo 2: Configurar o Google OAuth (Obrigatório)
-O aplicativo usa o Google Sign-In. Como as chaves originais do desenvolvedor são secretas, você precisa gerar as suas próprias no Google Cloud Console para testar o login.
-
-Acesse o Google Cloud Console.
-
-Crie um projeto novo.
-
-Vá em "APIs e Serviços" -> "Tela de permissão OAuth" e configure como "Externo" em modo de teste.
-
-Vá em "Credenciais" e crie dois IDs de cliente OAuth:
-
-Um do tipo "Android": Insira o package name com.dutraeduardo.octosense e o SHA-1 da sua máquina (descubra com o comando keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android).
-
-Um do tipo "Aplicativo da Web": Este você usará no backend e no app (o GOOGLE_SERVER_CLIENT_ID).
-
-No arquivo frontend/mobile/android/app/build.gradle.kts, certifique-se de que o applicationId está batendo com o que você cadastrou.
-
-Passo 3: Rodar o App Flutter
 bash
+
+```bash
+cp .env.example .env
+```
+
+Edite o arquivo `.env` com as configurações necessárias, incluindo as credenciais do MongoDB.
+
+Inicie os containers:
+
+bash
+
+```bash
+docker-compose up -d
+```
+
+### 2\. Google OAuth
+
+O aplicativo utiliza o Google Sign-In. Para executar o projeto, é necessário configurar suas próprias credenciais.
+
+1. Acesse o [Google Cloud Console](<https://console.cloud.google.com/>).
+2. Crie um projeto.
+3. Acesse a configuração da tela de permissão OAuth.
+4. Configure o aplicativo como externo e habilite o modo de teste.
+5. Acesse a área de credenciais e crie os seguintes clientes OAuth:
+
+**Cliente Android**
+
+- Tipo: Android.
+- Package name: `com.dutraeduardo.octosense`.
+- SHA-1: impressão digital da chave de assinatura utilizada no desenvolvimento.
+
+Para obter o SHA-1 da chave de debug:
+
+bash
+
+```bash
+keytool -list -v \
+-keystore ~/.android/debug.keystore \
+-alias androiddebugkey \
+-storepass android \
+-keypass android
+```
+
+**Cliente Web**
+
+Crie um cliente OAuth do tipo Aplicativo da Web e copie o Client ID gerado.
+
+Esse identificador será utilizado na configuração `GOOGLE_SERVER_CLIENT_ID`.
+
+Verifique também se o `applicationId` em `frontend/mobile/android/app/build.gradle.kts` corresponde ao package name cadastrado.
+
+### 3\. Aplicativo Flutter
+
+Entre na pasta do aplicativo:
+
+bash
+
+```bash
 cd frontend/mobile
+```
 
-# Baixe as dependências
+Instale as dependências:
+
+bash
+
+```bash
 flutter pub get
+```
 
-# Rode o app passando sua URL de backend e seu Client ID do Google (Web)
-flutter run --dart-define=API_BASE=http://localhost:5137 --dart-define=GOOGLE_SERVER_CLIENT_ID=SEU_CLIENT_ID_AQUI
-Limitações Conhecidas
-Frequência Cardíaca em alguns dispositivos: O app oficial da Xiaomi (Mi Fitness) não exporta a frequência cardíaca contínua para o Health Connect. Para contornar isso, recomenda-se o uso do app open-source Gadgetbridge.
+Execute o aplicativo:
 
-Sincronização: O app faz a leitura do Health Connect no momento em que é aberto. Não há sincronização em background no momento.
+bash
 
-Licença
-Este projeto está licenciado sob a MIT License. Veja o arquivo LICENSE para mais detalhes.
+```bash
+flutter run \
+--dart-define=API_BASE=http://localhost:5137 \
+--dart-define=GOOGLE_SERVER_CLIENT_ID=SEU_CLIENT_ID_AQUI
+```
 
+Se estiver utilizando um dispositivo Android físico, substitua `localhost` pelo endereço IP local da máquina que executa o backend.
+
+## Limitações conhecidas
+
+- **Frequência cardíaca:** o Mi Fitness pode não disponibilizar registros contínuos de frequência cardíaca no Health Connect. Uma alternativa é utilizar o [Gadgetbridge](<https://gadgetbridge.org/>).
+- **Sincronização:** atualmente, os dados são consultados quando o aplicativo é aberto. A sincronização em segundo plano ainda não está implementada.
+
+## Licença
+
+Este projeto está licenciado sob a MIT License. Consulte o arquivo LICENSE para mais informações.
