@@ -1,6 +1,6 @@
 # OctoSense
 
-\!Flutter \!C# \!.NET \!MongoDB
+Flutter | C# | .NET | MongoDB
 
 O OctoSense é um aplicativo Android que coleta e centraliza dados de saúde de dispositivos vestíveis, utilizando o Android Health Connect. Os dados são enviados para um backend próprio e utilizados para gerar resumos com um modelo de linguagem local.
 
