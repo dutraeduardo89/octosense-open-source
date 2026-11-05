@@ -1,85 +1,48 @@
-# 🐙 OctoSense
+# OctoSense
 
-![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
-![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
-![.NET](https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+OctoSense é um aplicativo Android (Flutter) focado em agregação de dados de saúde. Ele lê métricas de wearables via Android Health Connect, envia os dados para um backend próprio (C# .NET) e gera insights personalizados usando um modelo de linguagem local (Ollama).
 
-O **OctoSense** é um aplicativo de monitoramento de saúde que conecta dados de relógios inteligentes (via Android Health Connect) a um backend próprio, gerando insights personalizados com Inteligência Artificial local.
+O projeto foi originalmente construído como trabalho de conclusão para a feira de tecnologia EXPOTEC (Fortec), sob o tema "Aparelhos Inteligentes e Impactos na Saúde".
 
-Este projeto foi originalmente desenvolvido para a feira de tecnologia **EXPOTEC (Fortec)** com o tema: *"Aparelhos Inteligentes e Impactos na Saúde"*.
+## Arquitetura do Sistema
 
----
+O fluxo de dados funciona da seguinte forma:
 
-## ✨ Funcionalidades
+1. **Coleta (Mobile):** O relógio (ex: Redmi Watch 5 Active) sincroniza com o Health Connect do Android.
+2. **Leitura (Flutter):** O app lê esses dados usando o pacote `health` e lida com a deduplicação de fontes (evitando contagem dupla do sono, por exemplo).
+3. **Envio (HTTP):** O app envia um resumo diário para a API, autenticando via JWT.
+4. **Processamento (Backend):** A API (C#) salva os dados no MongoDB e, quando solicitada, envia as métricas para o Ollama gerar um resumo em texto natural.
+5. **Exibição:** O app renderiza os gráficos e o insight gerado.
 
-- 📊 **Dashboard em tempo real:** Passos, calorias ativas/totais, oxigenação (SpO2) e sono.
-- ❤️ **Frequência Cardíaca:** Leitura contínua com gráficos ao longo do dia.
-- �� **Insights com IA:** Utiliza Ollama (modelo local) para gerar resumos semanais da sua saúde.
-- 🔐 **Autenticação Segura:** Login via Google OAuth 2.0 com validação de token JWT no backend.
-- ⌚ **Multi-dispositivos:** Suporte nativo ao Health Connect (com fallback para Gadgetbridge em relógios Xiaomi/Redmi).
+## Ficha Técnica
 
----
+- **Frontend:** Flutter / Dart
+- **Backend:** C# / .NET / ASP.NET Core
+- **Banco de Dados:** MongoDB
+- **IA:** Ollama (Rodando localmente, modelo padrão configurável)
+- **Autenticação:** Google Sign-In + JWT (Bearer Tokens)
+- **Integração de Saúde:** Android Health Connect API
 
-## 🏗️ Arquitetura
+## Pré-requisitos para Rodar Localmente
 
-[Relógio Inteligente] 
-       │ (Bluetooth)
-       ▼
-[Health Connect / Gadgetbridge] 
-       │ (API Nativa)
-       ▼
-[App Flutter] ──(HTTP/JWT)──► [Backend C# .NET] ──► [MongoDB]
-                                     │
-                                     ▼
-                               [Ollama IA]
+Para testar o projeto completo na sua máquina, você precisará de:
 
----
+- [Flutter SDK](https://flutter.dev/docs/get-started/install) instalado.
+- [Docker e Docker Compose](https://docs.docker.com/get-docker/) para o banco e a API.
+- [Ollama](https://ollama.com/) rodando localmente (recomendado modelo `llama3` ou `phi3`).
+- Um projeto no **Google Cloud Console** para gerar suas próprias credenciais OAuth.
 
-## 🚀 Como rodar o projeto localmente
+## Como Rodar o Projeto
 
-### Pré-requisitos
-- Flutter SDK
-- Docker e Docker Compose
-- .NET 8 SDK
-- Ollama (rodando localmente)
+### Passo 1: Configurar o Backend
+```bash
+# Clone o repositório
+git clone https://github.com/dutraeduardo89/octosense-open-source.git
+cd octosense-open-source
 
-### 1. Backend (Docker)
-Clone o repositório:
-git clone https://github.com/seu-usuario/octosense.git
-cd octosense
-
-Configure as variáveis de ambiente:
+# Configure as variáveis de ambiente
 cp .env.example .env
-(Edite o .env com suas credenciais)
+# Edite o .env com as credenciais do MongoDB
 
-Suba o banco e a API:
+# Suba os containers (API + MongoDB)
 docker-compose up -d
-
-### 2. Frontend (Flutter)
-cd frontend/mobile
-
-Baixe as dependências:
-flutter pub get
-
-Rode o app apontando para o seu backend local e seu Client ID do Google:
-flutter run --dart-define=API_BASE=http://localhost:5137 --dart-define=GOOGLE_SERVER_CLIENT_ID=SEU_CLIENT_ID_AQUI
-
----
-
-## 🤝 Como Contribuir
-
-1. Faça um Fork do projeto.
-2. Crie uma branch para sua feature (git checkout -b feature/MinhaNovaFeature).
-3. Commit suas mudanças (git commit -m 'feat: Adiciona suporte ao Apple HealthKit').
-4. Faça o push para a branch (git push origin feature/MinhaNovaFeature).
-5. Abra um Pull Request.
-
----
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
----
-Feito com 💙 por [Eduardo Dutra](https://github.com/seu-usuario)
